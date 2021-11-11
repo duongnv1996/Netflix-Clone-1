@@ -11,10 +11,10 @@ module.exports = () => {
   const env = dotenv.config().parsed;
 
   // reduce env variables to an oject
-  const envKeys = Object.keys(env).reduce((prev, next) => {
-    prev[`process.env.${next}`] = JSON.stringify(env[next]);
-    return prev;
-  }, {});
+  // const envKeys = Object.keys(env).reduce((prev, next) => {
+  //   prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  //   return prev;
+  // }, {});
 
   return {
     entry: './src/index.js',
@@ -79,7 +79,7 @@ module.exports = () => {
       fs: 'empty',
     },
     plugins: [
-      new webpack.DefinePlugin(envKeys),
+      new webpack.DefinePlugin(),
       new HtmlWebPackPlugin({
         template: './src/index.html',
         filename: './index.html',
