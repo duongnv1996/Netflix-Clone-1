@@ -50,10 +50,10 @@ export default class Search extends Component {
     const movieId = movie.id;
     /** Make the appropriate API call to get the details for a single movie or tv show. */
     // if (movie.media_type === "movie") {
-    //   url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.API_KEY}`;
+    //   url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=9d2bff12ed955c7f1f74b83187f188ae`;
 
     // } else if (movie.media_type === "tv") {
-    //   url = `https://api.themoviedb.org/3/tv/${tvId}?api_key=${process.env.API_KEY}`;
+    //   url = `https://api.themoviedb.org/3/tv/${tvId}?api_key=9d2bff12ed955c7f1f74b83187f188ae`;
     // }
     
 

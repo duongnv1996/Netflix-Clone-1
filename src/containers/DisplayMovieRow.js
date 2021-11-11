@@ -29,7 +29,7 @@ export default class DisplayMovieRow extends Component {
     let netflixUrl = false;
     if (
       this.props.url ===
-      `/discover/tv?api_key=${process.env.API_KEY}&with_networks=213`
+      `/discover/tv?api_key=9d2bff12ed955c7f1f74b83187f188ae&with_networks=213`
     ) {
       netflixUrl = true;
     }
@@ -77,7 +77,7 @@ export default class DisplayMovieRow extends Component {
               'https://image.tmdb.org/t/p/w500/' + movie.backdrop_path;
             if (
               this.props.url ===
-              `/discover/tv?api_key=${process.env.API_KEY}&with_networks=213`
+              `/discover/tv?api_key=9d2bff12ed955c7f1f74b83187f188ae&with_networks=213`
             ) {
               movieImageUrl =
                 'https://image.tmdb.org/t/p/original/' + movie.poster_path;

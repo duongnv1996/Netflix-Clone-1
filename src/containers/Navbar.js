@@ -53,7 +53,7 @@ class Navbar extends Component {
       this.props.history.push('/')
       return
     }
-    // const url = `/search/multi?api_key=${process.env.API_KEY}&language=en-US&include_adult=false&query=${searchItem}`;
+    // const url = `/search/multi?api_key=9d2bff12ed955c7f1f74b83187f188ae&language=en-US&include_adult=false&query=${searchItem}`;
     // const response = await axios.get(url);
     const responseSN = await apiPhimHD.get(`/api/phimhd/searchByQuery?query=${searchItem}&serverQuery=${process.env.SERVER_QUERY}&forceRefresh=true`)
     const results = responseSN.data.data.listMovie;
