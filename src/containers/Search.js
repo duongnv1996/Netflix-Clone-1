@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Modal from '../components/UI/Modal';
 import MovieDetails from '../components/Movie/MovieDetails';
 import Movie from '../components/Movie/Movie';
-import axios from '../axios-movies';
+import axios from '../api/axios-phimhd';
 
 export default class Search extends Component {
   constructor(props) {
@@ -17,12 +17,14 @@ export default class Search extends Component {
   }
 
   componentDidMount = async () => {
+    console.log("componentDidMount")
     const { movieRows } = this.props.history.location;
     if (movieRows)
       await this.setState({ movies: movieRows });
   }
 
   componentDidUpdate = async (prevProps) => {
+    console.log("componentDidUpdate",prevProps.location)
     if (
       prevProps.location.movieRows.length !==
       this.props.location.movieRows.length
@@ -34,25 +36,34 @@ export default class Search extends Component {
   closeModal = () => {
     this.setState({ toggleModal: false });
   }
-
+  onClickPlay = () => {
+    this.props.history.push({
+      pathname: '/detail',
+      movieDetail: this.state.movieOverview
+    });
+  }
   /* Get the appropriate details for a specific movie that was clicked */
   selectMovieHandler = (movie) => {
     this.setState({ toggleModal: true });
 
-    let url;
+    let url = `/api/phimhd/getDetailInfoMovie?urlDetail=${movie.urlDetail}&serverQuery=${process.env.SERVER_QUERY}&forceRefresh=true`;
+    const movieId = movie.id;
     /** Make the appropriate API call to get the details for a single movie or tv show. */
-    if (movie.media_type === "movie") {
-      const movieId = movie.id;
-      url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.API_KEY}`;
+    // if (movie.media_type === "movie") {
+    //   url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.API_KEY}`;
 
-    } else if (movie.media_type === "tv") {
-      const tvId = movie.id
-      url = `https://api.themoviedb.org/3/tv/${tvId}?api_key=${process.env.API_KEY}`;
-    }
+    // } else if (movie.media_type === "tv") {
+    //   url = `https://api.themoviedb.org/3/tv/${tvId}?api_key=${process.env.API_KEY}`;
+    // }
+    
 
     axios.get(url)
       .then(res => {
-        const movieData = res.data;
+        const movieData = res.data.data;
+        movieData.title = movie.title
+        movieData.urlDetail = movie.urlDetail
+        movieData.urlPhoto = movie.urlPhoto
+        movieData.status = movie.status
         this.setState({ movieOverview: movieData });
       }).catch(error => {
         console.log(error);
@@ -71,20 +82,16 @@ export default class Search extends Component {
               {
                 movies.map((movie) => {
                   let movieRows = []
-                  let movieImageUrl;
-                  if (movie.poster_path !== null && movie.media_type !== "person") {
-                    movieImageUrl = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
+                  
+                  /** Set the movie object to our Movie component */
+                  const movieComponent = <Movie
+                  movieDetails={() => this.selectMovieHandler(movie)}
+                  key={movie.title}
+                  movieImage={movie.urlPhoto}
+                  movie={movie} />
 
-                    /** Set the movie object to our Movie component */
-                    const movieComponent = <Movie
-                      movieDetails={() => this.selectMovieHandler(movie)}
-                      key={movie.id}
-                      movieImage={movieImageUrl}
-                      movie={movie} />
-
-                    /** Push our movie component to our movieRows array */
-                    movieRows.push(movieComponent);
-                  }
+                /** Push our movie component to our movieRows array */
+                  movieRows.push(movieComponent);
                   return movieRows
                 })
               }
@@ -107,7 +114,7 @@ export default class Search extends Component {
         <Modal Modal show={this.state.toggleModal}
           modalClosed={this.closeModal}
           movie={this.state.movieOverview} >
-          <MovieDetails movie={this.state.movieOverview} />
+          <MovieDetails movie={this.state.movieOverview} onClickPlay={this.onClickPlay} />
         </Modal>
       </>
     );

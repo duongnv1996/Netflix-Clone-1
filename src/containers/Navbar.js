@@ -4,12 +4,13 @@ import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 
 import axios from '../axios-movies';
+import apiPhimHD from '../api/axios-phimhd';
 import SearchLogo from '../static/images/search-icon.svg';
-import NetflixLogo from '../static/images/Netflix_Logo_RGB.png';
+import NetflixLogo from '../static/images/logo_phimhd_black.png';
 import BellLogo from '../static/images/bell-logo.svg';
 import DropdownArrow from '../static/images/drop-down-arrow.svg';
 import DropdownContent from "../components/DropdownContent";
-
+import SubNhanh from '../api/SubNhanh';
 class Navbar extends Component {
   constructor(props) {
     super(props)
@@ -52,9 +53,11 @@ class Navbar extends Component {
       this.props.history.push('/')
       return
     }
-    const url = `/search/multi?api_key=${process.env.API_KEY}&language=en-US&include_adult=false&query=${searchItem}`;
-    const response = await axios.get(url);
-    const results = response.data.results;
+    // const url = `/search/multi?api_key=${process.env.API_KEY}&language=en-US&include_adult=false&query=${searchItem}`;
+    // const response = await axios.get(url);
+    const responseSN = await apiPhimHD.get(`/api/phimhd/searchByQuery?query=${searchItem}&serverQuery=${process.env.SERVER_QUERY}&forceRefresh=true`)
+    const results = responseSN.data.data.listMovie;
+    console.log("API SEARCH:",responseSN)
     this.props.history.push({
       pathname: '/search',
       movieRows: results,
